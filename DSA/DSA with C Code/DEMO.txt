@@ -1,0 +1,110 @@
+struct pol *polyadd(struct pol *poly1, struct pol *poly2, struct pol *poly)
+{
+    struct pol *p1 = poly1, *p2 = poly2, *add;
+
+    while (p1 != NULL && p2 != NULL)
+    {
+        if (poly == NULL)
+        {
+            poly = (struct pol *)malloc(sizeof(struct pol));
+            add = poly;
+        }
+        else
+        {
+            add->next = (struct pol *)malloc(sizeof(struct pol));
+            add = add->next;
+        }
+
+        // Condition for p1 exponent is greater than p2 exponent then push into new linked list 
+        if (p1->exp > p2->exp)
+        {
+            add->op = p1->op;
+            add->coeff = p1->coeff;
+            add->exp = p1->exp;
+            p1 = p1->next;
+        }
+
+        // Condition for p1 exponent is less than p2 exponent then push into new linked list
+        else if (p1->exp < p2->exp)
+        {
+            add->op = p2->op;
+            add->coeff = p2->coeff;
+            add->exp = p2->exp;
+            p2 = p2->next;
+        }
+
+        // Condition for p1 exponent and p2 exponent both are equal then performing below operation
+        else if (p1->exp == p2->exp)
+        {
+            // Check if both operator is same then performing addtion and push the operator and answer in linked list
+            if (p1->op == p2->op)
+            {
+                add->op = p1->op;
+                add->coeff = p1->coeff + p2->coeff;
+                add->exp = p1->exp;
+                p1 = p1->next;
+                p2 = p2->next;
+            }
+            else if (p1->op == '+' && p2->op == '-')
+            {
+                if (p1->coeff > p2->coeff)
+                {
+                    add->op = '+';
+                    add->coeff = p1->coeff - p2->coeff;
+                    add->exp = p1->exp;
+                    p1 = p1->next;
+                    p2 = p2->next;
+                }
+                else
+                {
+                    add->op = '-';
+                    add->coeff = p2->coeff - p1->coeff;
+                    add->exp = p1->exp;
+                    p1 = p1->next;
+                    p2 = p2->next;
+                }
+            }
+            else if (p1->op == '-' && p2->op == '+')
+            {
+                if (p1->coeff > p2->coeff)
+                {
+                    add->op = '-';
+                    add->coeff = p1->coeff - p2->coeff;
+                    add->exp = p1->exp;
+                    p1 = p1->next;
+                    p2 = p2->next;
+                }
+                else
+                {
+                    add->op = '+';
+                    add->coeff = p2->coeff - p1->coeff;
+                    add->exp = p1->exp;
+                    p1 = p1->next;
+                    p2 = p2->next;
+                }
+            }
+        }
+    }
+    while (p1 != NULL)
+    {
+        add->next = (struct pol *)malloc(sizeof(struct pol));
+        add = add->next;
+        add->op = p1->op;
+        add->coeff = p1->coeff;
+        add->exp = p1->exp;
+        p1 = p1->next;
+    }
+
+    while (p2 != NULL)
+    {
+        add->next = (struct pol *)malloc(sizeof(struct pol));
+        add = add->next;
+        add->op = p2->op;
+        add->coeff = p2->coeff;
+        add->exp = p2->exp;
+        p2 = p2->next;
+    }
+
+    add->next = NULL;
+    return poly;
+}
